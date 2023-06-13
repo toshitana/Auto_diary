@@ -28,7 +28,7 @@ $JSON_BLOB = {
 
 }
 
-質問リストjson:{{gen 'result' n=5 temperature=0.9 max_tokens=256}}
+Question list json:{{gen 'result' n=5 temperature=0.8 max_tokens=256}}
 
 """)
 
