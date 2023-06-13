@@ -4,24 +4,6 @@ import guidance
 # set the default language model used to execute guidance programs
 guidance.llm = guidance.llms.OpenAI("text-davinci-003")
 
-# define a guidance program that adapts a proverb
-program = guidance("""Tweak this proverb to apply to model instructions instead.
-
-{{proverb}}
-- {{book}} {{chapter}}:{{verse}}
-
-UPDATED
-Where there is no guidance{{gen 'rewrite' stop="\\n-"}}
-- GPT {{#select 'chapter'}}9{{or}}10{{or}}11{{/select}}:{{gen 'verse'}}""")
-
-# execute the program on a specific proverb
-executed_program = program(
-    proverb="Where there is no guidance, a people falls,\nbut in an abundance of counselors there is safety.",
-    book="Proverbs",
-    chapter=11,
-    verse=14
-)
-print(executed_program)
 """
 class Prompt:
     def __init__(self):
@@ -33,27 +15,42 @@ class Prompt:
 
     def make_diary(self, *args) -> str:
         return " ".join(args)
+
 """
 
-program1 = guidance("""
-あなたは優秀な日記生成アシスタントAIです。あなたは日記を作成するために3つの質問を行ってください。
+instruct = guidance("""
+あなたは優秀な日記生成アシスタントAIです。あなたは日記作成のネタとして、3つの質問を行ってください。
 
-イベントが与えられたら、イベントに沿った質問を3つの内1つ加えてください。
-{{event}}
+$JSON_BLOB = {
+    "question1": "質問1",
+    "question2": "質問2",
+    "question3": "質問3"
+
+}
+
+質問リストjson:{{gen 'result' n=5 temperature=0.9 max_tokens=256}}
 
 """)
 
-program2 = guidance("""
-質問と回答のペアが3つあります。これらは日記作成のためにサンプルされました。
-これらの質問と回答のペアを用いて日記を作成してください。
-Data:{{date}}
+instruct_event = guidance("""
+あなたは優秀な日記生成アシスタントAIです。あなたは日記作成のネタとして、イベントに沿った質問を3つ作成してください
 
-question:{{question}}
-answer:{{answer}}
+イベント：{{event}}
 
-question:{{question}}
-answer:{{answer}}
 
-question:{{question}}
-answer:{{answer}}
+$JSON_BLOB = 
+{
+    "question1": "質問1",
+    "question2": "質問2",
+    "question3": "質問3"
+
+}
+
+Question list json:{{gen 'result' n=1 temperature=1 max_tokens=256}}
+
 """)
+
+executed_program = instruct()
+
+for thing in executed_program["result"]:
+    print(thing)
