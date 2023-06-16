@@ -14,7 +14,6 @@ $JSON_BLOB = {
 }
 
 Question list json:{{gen 'result' n=1 temperature=0.8 max_tokens=256}}
-
 """)
 executed_program = instruct()
 
