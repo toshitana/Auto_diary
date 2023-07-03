@@ -1,2 +1,2 @@
-# Auto_diary
+# Auto_Diary_Back_End
 Auto Diaryは日記作成支援AIです。簡単な質問に答えるだけで日記を作成してくれます
